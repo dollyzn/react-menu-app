@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MenuHeader } from "@/components/menu-header";
+import { Frown } from "lucide-react";
 
 type MenuItem = {
   nome: string;
@@ -180,9 +181,11 @@ const cardapio: Category[] = [
   },
 ];
 
-export default function CardapioPastelaria() {
+export default function Menu() {
   const [activeTab, setActiveTab] = useState<string>(cardapio[0].name);
   const [showTabs, setShowTabs] = useState<boolean>(false);
+  const [filter, setFilter] = useState<string>("");
+  const [filteredMenu, setFilteredMenu] = useState<Category[]>(cardapio);
   const sectionsRef = useRef<(HTMLHeadingElement | null)[]>([]);
   const tabsListRef = useRef<HTMLDivElement | null>(null);
 
@@ -253,6 +256,26 @@ export default function CardapioPastelaria() {
     };
   }, []);
 
+  useEffect(() => {
+    if (filter.trim() === "") {
+      setFilteredMenu(cardapio);
+    } else {
+      const query = filter.toLowerCase();
+      const filtered = cardapio
+        .map((category) => ({
+          ...category,
+          items: category.items.filter(
+            (item) =>
+              item.nome.toLowerCase().includes(query) ||
+              item.descricao.toLowerCase().includes(query)
+          ),
+        }))
+        .filter((category) => category.items.length > 0);
+
+      setFilteredMenu(filtered);
+    }
+  }, [filter]);
+
   return (
     <main className="min-h-screen pb-8 flex justify-center">
       <div className="w-full max-w-[500px]">
@@ -282,32 +305,40 @@ export default function CardapioPastelaria() {
           </TabsList>
         </Tabs>
 
-        <MenuHeader />
+        <MenuHeader filter={filter} setFilter={setFilter} />
 
         <div className="mt-4 space-y-8 px-2">
-          {cardapio.map((category, index) => (
-            <div
-              key={category.name}
-              id={category.name}
-              className="scroll-mt-32"
-              ref={(el) => {
-                sectionsRef.current[index] = el;
-              }}
-            >
-              <h2 className="text-2xl font-semibold mb-4">{category.name}</h2>
-              <div className="space-y-4">
-                {category.items.map((item) => (
-                  <Card key={item.nome} className="p-4">
-                    <h3 className="text-lg font-semibold">{item.nome}</h3>
-                    <p className="text-gray-600 text-sm">{item.descricao}</p>
-                    <p className="text-green-600 font-bold mt-2">
-                      R$ {item.preco.toFixed(2)}
-                    </p>
-                  </Card>
-                ))}
+          {filteredMenu.length > 0 ? (
+            filteredMenu.map((category, index) => (
+              <div
+                key={category.name}
+                id={category.name}
+                className="scroll-mt-32"
+                ref={(el) => {
+                  sectionsRef.current[index] = el;
+                }}
+              >
+                <h2 className="text-2xl font-semibold mb-4">{category.name}</h2>
+                <div className="space-y-4">
+                  {category.items.map((item) => (
+                    <Card key={item.nome} className="p-4">
+                      <h3 className="text-lg font-semibold">{item.nome}</h3>
+                      <p className="text-gray-600 text-sm">{item.descricao}</p>
+                      <p className="text-green-600 font-bold mt-2">
+                        R$ {item.preco.toFixed(2)}
+                      </p>
+                    </Card>
+                  ))}
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="flex flex-col items-center justify-center mt-10 text-center ">
+              <Frown className="w-12 h-12 mb-4" />
+              <p className="text-lg font-semibold">Nenhum produto encontrado</p>
+              <p className="text-sm">Tente buscar por outro termo.</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </main>
