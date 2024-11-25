@@ -1,6 +1,6 @@
 "use client";
 
-import { Moon, Sun, Monitor, Loader2 } from "lucide-react";
+import { Moon, Sun, SunMoon, Loader2 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ export function ModeSwitcher() {
                     : "opacity-0 scale-0"
                 }`}
               />
-              <Monitor
+              <SunMoon
                 className={`absolute h-5 w-5 transition-all ${
                   currentTheme === "system"
                     ? "opacity-100 scale-100"
@@ -66,7 +66,7 @@ export function ModeSwitcher() {
           <span>Escuro</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          <Monitor className="mr-2 h-4 w-4" />
+          <SunMoon className="mr-2 h-4 w-4" />
           <span>Automático</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
