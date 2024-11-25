@@ -2,8 +2,9 @@ import "@/styles/globals.css";
 import type { Metadata } from "next";
 
 import { fontMono, fontSans } from "@/lib/fonts";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import { cn } from "@/lib/utils";
+import { ReduxProvider } from "@/providers/redux-provider";
 
 export const metadata: Metadata = {
   title: "JJ Pastéis",
@@ -30,9 +31,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <div vaul-drawer-wrapper="" className="bg-background min-h-screen">
-            {children}
-          </div>
+          <ReduxProvider>
+            <div vaul-drawer-wrapper="" className="bg-background min-h-screen">
+              {children}
+            </div>
+          </ReduxProvider>
         </ThemeProvider>
       </body>
     </html>

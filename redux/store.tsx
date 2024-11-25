@@ -1,0 +1,108 @@
+"use client";
+
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import storage from "redux-persist-indexeddb-storage";
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+  persistReducer,
+  createTransform,
+  createMigrate,
+} from "redux-persist";
+import { injectStore } from "@/providers/request-provider";
+import auth, { AuthState } from "@/redux/slices/auth";
+
+let devToolsEnabled = false;
+
+if (typeof window !== "undefined") {
+  const url = window.location.href;
+
+  if (url.includes("localhost") || url.includes("127.0.0.1")) {
+    devToolsEnabled = true;
+  } else {
+    devToolsEnabled = false;
+  }
+}
+
+type PersistentData = {
+  auth: AuthState;
+};
+
+const persistentData: PersistentData = {
+  auth: {
+    loading: false,
+    user: {},
+    token: {},
+    error: null,
+  },
+};
+
+const deepMerge = (target: any, source: any): any => {
+  if (typeof target !== "object" || target === null) {
+    return source;
+  }
+
+  const merged = { ...target };
+  for (const key in source) {
+    if (
+      typeof source[key] === "object" &&
+      source[key] !== null &&
+      !Array.isArray(source[key])
+    ) {
+      merged[key] = deepMerge(target[key], source[key]);
+    } else {
+      merged[key] = source[key];
+    }
+  }
+
+  return merged;
+};
+
+const transform = createTransform(
+  (inboundState: any, key: keyof PersistentData) => {
+    return deepMerge(inboundState, persistentData[key]);
+  },
+
+  (outboundState: any) => {
+    return { ...outboundState };
+  }
+);
+
+const migrations = {};
+
+const config = {
+  version: 0,
+  key: "root",
+  storage: storage("ReactMenuApp"),
+  transforms: [transform],
+  whitelist: ["auth"],
+  migrate: createMigrate(migrations, { debug: devToolsEnabled }),
+};
+
+const reducers = combineReducers({
+  auth,
+});
+
+export type RootState = ReturnType<typeof reducers>;
+
+const reducer = persistReducer<RootState>(config, reducers);
+
+const store = configureStore({
+  reducer: reducer,
+  devTools: devToolsEnabled,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: true,
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+injectStore(store);
+
+export default store;
