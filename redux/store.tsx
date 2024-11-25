@@ -74,10 +74,28 @@ const transform = createTransform(
 
 const migrations = {};
 
+const getStorage = () => {
+  if (typeof window === "undefined") {
+    return {
+      getItem() {
+        return Promise.resolve(null);
+      },
+      setItem() {
+        return Promise.resolve();
+      },
+      removeItem() {
+        return Promise.resolve();
+      },
+    };
+  }
+
+  return storage("ReactMenuApp");
+};
+
 const config = {
   version: 0,
   key: "root",
-  storage: storage("ReactMenuApp"),
+  storage: getStorage(),
   transforms: [transform],
   whitelist: ["auth"],
   migrate: createMigrate(migrations, { debug: devToolsEnabled }),
@@ -104,5 +122,7 @@ const store = configureStore({
 });
 
 injectStore(store);
+
+export type AppDispatch = typeof store.dispatch;
 
 export default store;
