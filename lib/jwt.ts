@@ -9,7 +9,7 @@ function decode(token: string | undefined): User | null {
   try {
     if (!token) return null;
     return jwtDecode(token);
-  } catch (error) {
+  } catch {
     return null;
   }
 }

@@ -1,10 +1,10 @@
 "use client";
 
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
-import { useSession } from "./session-provider";
 
 export const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
 });
 
 let token: string | undefined;
@@ -18,10 +18,6 @@ api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
 
   if (!config.headers["Content-Type"]) {
     config.headers["Content-Type"] = "application/json";
-  }
-
-  if (token && !config.headers["Authorization"]) {
-    config.headers["Authorization"] = `Bearer ${token}`;
   }
 
   return config;

@@ -6,11 +6,15 @@ import {
   ReactNode,
   useEffect,
 } from "react";
-import axios, { AxiosInstance } from "axios";
 import { encode, decode } from "../lib/jwt";
 import { setCookie, removeCookie, getCookie } from "../lib/cookie";
-import { injectToken } from "./request-provider";
+import { useRouter } from "next/navigation";
+import { api } from "./request-provider";
 
+export interface LoginError {
+  message: string;
+  invalidCredentials: boolean;
+}
 interface SessionContextData {
   user: User | null;
   login: ({
@@ -27,16 +31,13 @@ const SessionContext = createContext<SessionContextData>(
   {} as SessionContextData
 );
 
-const api: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-});
-
 interface SessionProviderProps {
   children: ReactNode;
 }
 
 export function SessionProvider({ children }: SessionProviderProps) {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchUser() {
@@ -45,31 +46,29 @@ export function SessionProvider({ children }: SessionProviderProps) {
         const decodedUser = decode(token);
         if (decodedUser) {
           try {
-            const response = await api.get<User>("/auth/me", {
-              headers: {
-                Authorization: `Bearer ${decodedUser.token}`,
-              },
-            });
+            const response = await api.get<User>("/auth/me");
             if (response.data && response.data.id === decodedUser.id) {
               setUser(decodedUser);
             } else {
               removeCookie();
               setUser(null);
+              redirect();
             }
           } catch (error) {
             removeCookie();
             setUser(null);
+            redirect();
           }
+        } else {
+          redirect();
         }
       }
     }
-
+    function redirect() {
+      router.push("/auth/login");
+    }
     fetchUser();
   }, []);
-
-  useEffect(() => {
-    injectToken(user?.token);
-  }, [user]);
 
   async function login({
     email,
@@ -85,23 +84,25 @@ export function SessionProvider({ children }: SessionProviderProps) {
       });
 
       const data = response.data;
-      const jwtToken = encode(data);
+      const token = encode(data);
 
-      setCookie(jwtToken);
+      if (!data || !token) throw new Error("Login failed");
+
+      setCookie(token);
       setUser(data);
     } catch (error: any) {
-      throw error.response ? error.response.data : new Error("Login failed");
+      const isCredentialsInvalid =
+        error.response?.data?.message === "Invalid user credentials";
+      throw error.response
+        ? { ...error.response.data, invalidCredentials: isCredentialsInvalid }
+        : new Error("Login failed");
     }
   }
 
   async function logout() {
     if (user) {
       try {
-        await api.post("/auth/logout", null, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        });
+        await api.post("/auth/logout");
       } catch (error: any) {
         console.error("Logout failed", error);
       }

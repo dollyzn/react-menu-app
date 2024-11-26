@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { decode } from "./lib/jwt";
 import { cookies } from "next/headers";
 
-const protectedRoutes = ["/"];
+const protectedRoutes = ["/dashboard"];
 const publicRoutes = ["/auth/login"];
 
 const cookieName = process.env.NEXT_PUBLIC_AUTH_COOKIE_NAME;
@@ -16,18 +16,18 @@ export async function middleware(req: NextRequest) {
   const isPublicRoute = publicRoutes.includes(path);
 
   const cookie = (await cookies()).get(cookieName)?.value;
-  const session = await decode(cookie);
+  const session = decode(cookie);
 
-  if (isProtectedRoute && !session?.token) {
+  if (isProtectedRoute && !session?.id) {
     return NextResponse.redirect(new URL("/auth/login", req.nextUrl));
   }
 
   if (
     isPublicRoute &&
-    session?.token &&
-    !req.nextUrl.pathname.startsWith("/")
+    session?.id &&
+    !req.nextUrl.pathname.startsWith("/dashboard")
   ) {
-    return NextResponse.redirect(new URL("/", req.nextUrl));
+    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 
   return NextResponse.next();
