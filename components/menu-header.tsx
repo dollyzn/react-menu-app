@@ -3,6 +3,9 @@ import { ModeSwitcher } from "@/components/mode-switcher";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import banner from "../public/banner.jpg";
+import logo from "../public/logo.png";
+import Image from "next/image";
 
 interface MenuHeaderProps {
   filter: string;
@@ -37,8 +40,9 @@ export function MenuHeader({ filter, setFilter }: MenuHeaderProps) {
           {" "}
           {/* Menu banner */}
           <div className="relative h-48 w-full ">
-            <img
-              src="/banner.jpg"
+            <Image
+              priority
+              src={banner}
               alt="Restaurant banner"
               className="w-full h-full object-cover rounded-t-xl"
             />
@@ -47,8 +51,8 @@ export function MenuHeader({ filter, setFilter }: MenuHeaderProps) {
           <Card className="-mt-4 relative bg-zinc-50 dark:bg-black dark:text-white p-4 border-none">
             <div className="flex items-start gap-4">
               <div className="h-16 w-16 overflow-hidden">
-                <img
-                  src="/logo.png"
+                <Image
+                  src={logo}
                   alt="Restaurant logo"
                   className="w-full h-full object-contain"
                 />

@@ -27,13 +27,13 @@ const SessionContext = createContext<SessionContextData>(
   {} as SessionContextData
 );
 
-interface SessionProviderProps {
-  children: ReactNode;
-}
-
 const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
+
+interface SessionProviderProps {
+  children: ReactNode;
+}
 
 export function SessionProvider({ children }: SessionProviderProps) {
   const [user, setUser] = useState<User | null>(null);
