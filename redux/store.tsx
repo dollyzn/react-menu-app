@@ -13,7 +13,6 @@ import {
   createTransform,
   createMigrate,
 } from "redux-persist";
-import { injectStore } from "@/providers/request-provider";
 import auth, { AuthState } from "@/redux/slices/auth";
 
 let devToolsEnabled = false;
@@ -120,8 +119,6 @@ const store = configureStore({
       },
     }),
 });
-
-injectStore(store);
 
 export type AppDispatch = typeof store.dispatch;
 

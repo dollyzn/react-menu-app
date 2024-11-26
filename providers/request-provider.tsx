@@ -1,44 +1,35 @@
 "use client";
 
-import { Store } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
+import { useSession } from "./session-provider";
 
-export const api = axios.create({
+export const api: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-let store: Store;
+let token: string | undefined;
+export function injectToken(_token: string | undefined) {
+  token = _token;
+}
 
-export const injectStore = (_store: Store) => {
-  store = _store;
-};
-
-api.interceptors.request.use(async (config) => {
+api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
+  config.headers = config.headers || {};
   config.headers["Access-Control-Allow-Origin"] = "*";
 
-  if (config.headers["Content-Type"] === undefined) {
+  if (!config.headers["Content-Type"]) {
     config.headers["Content-Type"] = "application/json";
   }
 
-  const userToken = store.getState().auth?.token?.token;
-  const sessionExpired = store.getState().auth?.sessionExpired;
-
-  if (
-    !sessionExpired &&
-    userToken &&
-    config.headers["Authorization"] === undefined
-  ) {
-    config.headers["Authorization"] = `Bearer ${userToken}`;
+  if (token && !config.headers["Authorization"]) {
+    config.headers["Authorization"] = `Bearer ${token}`;
   }
 
   return config;
 });
 
 api.interceptors.response.use(
-  function (response) {
-    return response;
-  },
-  function (error) {
+  (response) => response,
+  (error) => {
     if (error.response) {
       switch (error.response.status) {
         case 422:
@@ -55,9 +46,6 @@ api.interceptors.response.use(
 
         case 401:
           error.code = "UNAUTHORIZED";
-          // if (window.location.pathname !== "/") {
-          //   store.dispatch(expireSession());
-          // }
           break;
 
         case 400:
@@ -69,7 +57,6 @@ api.interceptors.response.use(
           break;
       }
     }
-
     return Promise.reject(error);
   }
 );

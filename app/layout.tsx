@@ -5,6 +5,7 @@ import { fontMono, fontSans } from "@/lib/fonts";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { cn } from "@/lib/utils";
 import { ReduxProvider } from "@/providers/redux-provider";
+import { SessionProvider } from "@/providers/session-provider";
 
 export const metadata: Metadata = {
   title: "JJ Pastéis",
@@ -32,9 +33,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
           disableTransitionOnChange
         >
           <ReduxProvider>
-            <div vaul-drawer-wrapper="" className="bg-background min-h-screen">
-              {children}
-            </div>
+            <SessionProvider>
+              <div
+                vaul-drawer-wrapper=""
+                className="bg-background min-h-screen"
+              >
+                {children}
+              </div>
+            </SessionProvider>
           </ReduxProvider>
         </ThemeProvider>
       </body>
