@@ -28,14 +28,12 @@ if (typeof window !== "undefined") {
 }
 
 type PersistentData = {
-  auth: AuthState;
+  auth: Partial<AuthState>;
 };
 
 const persistentData: PersistentData = {
   auth: {
     loading: false,
-    user: {},
-    token: {},
     error: null,
   },
 };

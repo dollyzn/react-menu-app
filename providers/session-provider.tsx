@@ -1,15 +1,13 @@
 "use client";
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
+import { createContext, useContext, ReactNode, useEffect } from "react";
 import { encode, decode } from "../lib/jwt";
 import { setCookie, removeCookie, getCookie } from "../lib/cookie";
 import { useRouter } from "next/navigation";
 import { api } from "./request-provider";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { setUser } from "@/redux/slices/auth";
+import isEqual from "lodash/isEqual";
 
 export interface LoginError {
   message: string;
@@ -36,8 +34,10 @@ interface SessionProviderProps {
 }
 
 export function SessionProvider({ children }: SessionProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
     async function fetchUser() {
@@ -47,16 +47,14 @@ export function SessionProvider({ children }: SessionProviderProps) {
         if (decodedUser) {
           try {
             const response = await api.get<User>("/auth/me");
-            if (response.data && response.data.id === decodedUser.id) {
-              setUser(decodedUser);
-            } else {
+            if (response.data && !isEqual(response.data, decodedUser)) {
               removeCookie();
-              setUser(null);
+              dispatch(setUser(null));
               redirect();
             }
           } catch (error) {
             removeCookie();
-            setUser(null);
+            dispatch(setUser(null));
             redirect();
           }
         } else {
@@ -89,7 +87,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
       if (!data || !token) throw new Error("Login failed");
 
       setCookie(token);
-      setUser(data);
+      dispatch(setUser(data));
     } catch (error: any) {
       const isCredentialsInvalid =
         error.response?.data?.message === "Invalid user credentials";
@@ -108,7 +106,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
       }
     }
     removeCookie();
-    setUser(null);
+    dispatch(setUser(null));
   }
 
   return (
