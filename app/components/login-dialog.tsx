@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Eye, EyeOff, Lock, User, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -17,22 +16,25 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { LoginSchema } from "@/schema";
 import { LoginError, useSession } from "@/providers/session-provider";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { verify } from "crypto";
 
-export default function LoginPage() {
+export function LoginDialog() {
   const router = useRouter();
-  const { login } = useSession();
+  const { login, verify } = useSession();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [verifyLoading, setVerifyLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -68,18 +70,39 @@ export default function LoginPage() {
     }
   }
 
+  async function verifyUserSession() {
+    setVerifyLoading(true);
+    const loggedIn = await verify();
+    setVerifyLoading(false);
+
+    if (loggedIn) router.push("/manage");
+    else setIsOpen(true);
+  }
+
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-semibold">Login</CardTitle>
-          <CardDescription>
-            Digite suas credenciais para acessar sua conta
-          </CardDescription>
-        </CardHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <CardContent className="space-y-4 pb-4">
+    <>
+      <Button
+        size="icon"
+        variant="outline"
+        disabled={verifyLoading}
+        onClick={async () => {
+          await verifyUserSession();
+        }}
+      >
+        {verifyLoading ? <Loader2 className="animate-spin" /> : <User />}
+      </Button>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Login</DialogTitle>
+            <DialogDescription>
+              Digite suas credencias para acessar sua conta
+            </DialogDescription>
+          </DialogHeader>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="email"
@@ -109,7 +132,7 @@ export default function LoginPage() {
                 control={form.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="my-4">
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
                       <div className="relative">
@@ -142,26 +165,18 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-            </CardContent>
-            <CardFooter className="flex-col space-y-3">
-              <Button className="w-full" type="submit" loading={isSubmitting}>
+
+              <Button
+                className="w-full mt-4"
+                type="submit"
+                loading={isSubmitting}
+              >
                 Entrar
               </Button>
-
-              <Link href="/" passHref>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-muted-foreground"
-                >
-                  <ArrowLeft />
-                  Página Principal
-                </Button>
-              </Link>
-            </CardFooter>
-          </form>
-        </Form>
-      </Card>
-    </main>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
