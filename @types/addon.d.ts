@@ -1,12 +1,10 @@
-interface Item {
+interface Addon {
   id: string;
-  categoryId: string;
+  storeId: number;
   name: string;
   description: string | null;
   price: number;
   photoUrl: string | null;
   createdAt: string;
   updatedAt: string;
-  category?: Omit<Category, "items">;
-  addons?: Omit<Addon, "items">[];
 }
