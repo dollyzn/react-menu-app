@@ -2,34 +2,19 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Calendar, ChevronDown, History } from "lucide-react";
+import { Calendar, History } from "lucide-react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { ColumnsConfig } from "@/components/data-table";
 import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
 import { RowActions } from "./table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { formatCurrencyBRL } from "@/utils/string";
+import { Badge } from "@/components/ui/badge";
+import items from "../items.json";
 import dayjs from "dayjs";
 
-export const columns: ColumnDef<Category>[] = [
+export const columns: ColumnDef<Item>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -86,52 +71,30 @@ export const columns: ColumnDef<Category>[] = [
     },
   },
   {
-    id: "items",
-    accessorKey: "items",
+    id: "price",
+    accessorKey: "price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Itens" />
+      <DataTableColumnHeader column={column} title="Preço" />
+    ),
+    cell: ({ row }) => <div>{formatCurrencyBRL(row.getValue("price"))}</div>,
+    meta: {
+      name: "Preço",
+    },
+  },
+  {
+    id: "category.name",
+    accessorKey: "category.name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Categoria" />
     ),
     cell: ({ row }) => {
-      const items = row.getValue("items") as Item[];
-      return (
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button variant="ghost">
-              {items.length} Itens
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Itens da Categoria</DialogTitle>
-              <DialogDescription>
-                Lista dos itens da categoria {row.getValue("name")}
-              </DialogDescription>
-            </DialogHeader>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Descrição</TableHead>
-                  <TableHead>Valor</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {items.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell>{formatCurrencyBRL(item.price)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </DialogContent>
-        </Dialog>
-      );
+      return <Badge variant="outline">{row.getValue("category.name")}</Badge>;
     },
     meta: {
-      name: "Itens",
+      name: "Categoria",
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {
@@ -166,7 +129,6 @@ export const columns: ColumnDef<Category>[] = [
       name: "Atualizado em",
     },
   },
-
   {
     id: "actions",
     cell: ({ row, table }) => <RowActions row={row} table={table} />,
@@ -176,9 +138,18 @@ export const columns: ColumnDef<Category>[] = [
   },
 ];
 
+const categories = new Set(items.map(({ category }) => category.name));
+
 export const columnsConfig: ColumnsConfig[] = [
   {
     key: "name",
     searchable: true,
+  },
+  {
+    key: "category.name",
+    filterOptions: Array.from(categories).map((category) => ({
+      value: category,
+      label: category,
+    })),
   },
 ];

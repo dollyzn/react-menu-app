@@ -34,25 +34,21 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-interface RowActionsProps<Category> {
-  row: Row<Category>;
-  table: Table<Category>;
+interface RowActionsProps<Item> {
+  row: Row<Item>;
+  table: Table<Item>;
 }
 
-export function RowActions({ row, table }: RowActionsProps<Category>) {
+export function RowActions({ row, table }: RowActionsProps<Item>) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const selectedRows = table.getSelectedRowModel().rows;
-  const totalItems = selectedRows.reduce(
-    (acc, row) => acc + (row.original.items?.length || 0),
-    0
-  );
 
   const handleDelete = () => {
     if (selectedRows.length > 1) {
       console.log(
-        "Excluindo múltiplas categorias:",
+        "Excluindo múltiplos itens:",
         selectedRows.map((r) => r.original)
       );
     } else {
@@ -94,21 +90,21 @@ export function RowActions({ row, table }: RowActionsProps<Category>) {
       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Editar Categoria</DialogTitle>
+            <DialogTitle>Editar Item</DialogTitle>
             <DialogDescription>
-              Atualize as informações desta categoria.
+              Atualize as informações deste item.
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="name">Nome da Categoria</Label>
-              <Input id="name" defaultValue="Pastéis Simples" />
+              <Label htmlFor="name">Nome do Item</Label>
+              <Input id="name" defaultValue={row.original.name as string} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="address">Descrição</Label>
+              <Label htmlFor="description">Descrição</Label>
               <Textarea
-                id="address"
+                id="description"
                 defaultValue={row.original.description as string}
               />
             </div>
@@ -134,30 +130,22 @@ export function RowActions({ row, table }: RowActionsProps<Category>) {
             <AlertDialogDescription>
               {selectedRows.length > 1 ? (
                 <>
-                  Isso excluirá{" "}
-                  <span className="font-bold">
-                    todas as {selectedRows.length} categorias
-                  </span>{" "}
-                  selecionadas junto com todos os{" "}
-                  <span className="font-bold">{totalItems} itens</span>{" "}
-                  relacionados. Esta ação não pode ser desfeita.
+                  Isso excluirá todos os{" "}
+                  <span className="font-bold">{selectedRows.length} itens</span>{" "}
+                  selecionados. Esta ação não pode ser desfeita.
                 </>
               ) : (
                 <>
-                  Isso excluirá a categoria{" "}
-                  <span className="font-bold">{row.original.name}</span> junto
-                  com todos os seus{" "}
-                  <span className="font-bold">
-                    {row.original.items?.length} itens
-                  </span>{" "}
-                  relacionados. Esta ação não pode ser desfeita.
+                  Isso excluirá o item{" "}
+                  <span className="font-bold">{row.original.name}</span>. Esta
+                  ação não pode ser desfeita.
                 </>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setIsDeleteModalOpen(false)}>
-              Cancel
+              Cancelar
             </AlertDialogCancel>
 
             <Button variant="destructive" onClick={handleDelete}>
