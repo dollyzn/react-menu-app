@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { Row } from "@tanstack/react-table";
 
-import { indexByCategory } from "@/redux/slices/item";
+import { indexByItem } from "@/redux/slices/addon";
 
 import {
   Dialog,
@@ -26,45 +26,45 @@ import { ChevronDown, Loader2, Package } from "lucide-react";
 
 import { formatCurrencyBRL } from "@/utils/string";
 
-interface ItemsColumnDialogProps {
-  row: Row<Category>;
+interface AddonsColumnDialogProps {
+  row: Row<Item>;
 }
 
-export function ItemsColumnDialog({ row }: ItemsColumnDialogProps) {
+export function AddonsColumnDialog({ row }: AddonsColumnDialogProps) {
   const dispatch = useDispatch<AppDispatch>();
 
   const loading = useSelector(
-    (state: RootState) => state.item.indexByCategory.loading
+    (state: RootState) => state.addon.indexByItem.loading
   );
-  const items = useSelector(
-    (state: RootState) => state.item.indexByCategory.data
+  const addons = useSelector(
+    (state: RootState) => state.addon.indexByItem.data
   );
 
   const id = row.original.id;
-  const itemsCount = row.getValue("itemsCount") as number;
+  const addonsCount = row.getValue("addonsCount") as number;
 
   const [open, setOpen] = useState<boolean>(false);
-  const [loadingCategory, setLoadingCategory] = useState<number>(0);
+  const [loadingItem, setLoadingItem] = useState<string>("");
 
   async function handleToggleDialog() {
-    if (loadingCategory !== 0) return;
+    if (loadingItem !== "") return;
     if (open) return setOpen(!open);
 
-    setLoadingCategory(id);
-    const result = await dispatch(indexByCategory(id));
+    setLoadingItem(id);
+    const result = await dispatch(indexByItem(id));
 
-    if (indexByCategory.fulfilled.match(result)) {
+    if (indexByItem.fulfilled.match(result)) {
       setOpen(true);
     }
-    setLoadingCategory(0);
+    setLoadingItem("");
   }
 
   return (
     <Dialog open={open} onOpenChange={handleToggleDialog}>
       <DialogTrigger asChild>
         <Button variant="ghost" disabled={loading}>
-          {itemsCount || 0} Ite{itemsCount === 1 ? "m" : "ns"}
-          {loadingCategory === id ? (
+          {addonsCount || 0} Adiciona{addonsCount === 1 ? "l" : "is"}
+          {loadingItem === id ? (
             <Loader2 className="ml-2 h-4 w-4 animate-spin" />
           ) : (
             <ChevronDown className="ml-2 h-4 w-4" />
@@ -73,9 +73,9 @@ export function ItemsColumnDialog({ row }: ItemsColumnDialogProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Itens da Categoria</DialogTitle>
+          <DialogTitle>Adicionais do Item</DialogTitle>
           <DialogDescription>
-            Lista dos itens da categoria {row.getValue("name")}
+            Lista dos adicionais do item {row.getValue("name")}
           </DialogDescription>
         </DialogHeader>
         <Table>
@@ -87,12 +87,12 @@ export function ItemsColumnDialog({ row }: ItemsColumnDialogProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {items && items.length > 0 ? (
-              items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.description}</TableCell>
-                  <TableCell>{formatCurrencyBRL(item.price)}</TableCell>
+            {addons && addons.length > 0 ? (
+              addons.map((addon) => (
+                <TableRow key={addon.id}>
+                  <TableCell>{addon.name}</TableCell>
+                  <TableCell>{addon.description}</TableCell>
+                  <TableCell>{formatCurrencyBRL(addon.price)}</TableCell>
                 </TableRow>
               ))
             ) : (
@@ -100,7 +100,7 @@ export function ItemsColumnDialog({ row }: ItemsColumnDialogProps) {
                 <TableCell colSpan={3} className="text-center">
                   <div className="flex flex-col items-center justify-center py-4">
                     <Package className="h-8 w-8 text-muted-foreground mb-2" />
-                    <span>Não foram criados itens para esta categoria</span>
+                    <span>Não há adicionais disponíveis para este item</span>
                   </div>
                 </TableCell>
               </TableRow>
