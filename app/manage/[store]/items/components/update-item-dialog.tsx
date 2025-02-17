@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { Row } from "@tanstack/react-table";
+
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { store } from "@/redux/slices/item";
+import { indexByItem } from "@/redux/slices/addon";
+import { update } from "@/redux/slices/item";
 
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -46,7 +48,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Check, PackagePlus, PlusCircle } from "lucide-react";
+import { Check, Loader2, PackagePlus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -59,9 +61,9 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { z } from "zod";
 
-const CreateItemSchema = z.object({
+const UpdateItemSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório."),
-  description: z.string().optional(),
+  description: z.string().nullish(),
   price: z
     .number()
     .min(0.01, "O preço é obrigatório e deve ser maior que zero."),
@@ -69,7 +71,17 @@ const CreateItemSchema = z.object({
   addonIds: z.array(z.string()).optional(),
 });
 
-export function CreateItemDialog() {
+interface UpdateItemDialogProps {
+  open: boolean;
+  onOpenChange(open: boolean): void;
+  row: Row<Item>;
+}
+
+export function UpdateItemDialog({
+  open,
+  onOpenChange,
+  row,
+}: UpdateItemDialogProps) {
   const dispatch = useDispatch<AppDispatch>();
   const categories = useSelector(
     (state: RootState) => state.category.indexByStore.data
@@ -77,41 +89,54 @@ export function CreateItemDialog() {
   const addons = useSelector(
     (state: RootState) => state.addon.indexByStore.data
   );
+  const itemAddons = useSelector(
+    (state: RootState) => state.addon.indexByItem.data
+  );
+  const itemAddonsLoading = useSelector(
+    (state: RootState) => state.addon.indexByItem.loading
+  );
 
-  const form = useForm<z.infer<typeof CreateItemSchema>>({
-    resolver: zodResolver(CreateItemSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      price: 0,
-      categoryId: "",
-      addonIds: [],
+  useEffect(() => {
+    if (open) dispatch(indexByItem(row.original.id));
+  }, [dispatch, row.original.id, open]);
+
+  const form = useForm<z.infer<typeof UpdateItemSchema>>({
+    resolver: zodResolver(UpdateItemSchema),
+    values: {
+      name: row.getValue("name"),
+      description: row.getValue("description"),
+      price: row.getValue("price"),
+      categoryId: (row.original.category?.id || "").toString(),
+      addonIds: itemAddons?.map((addon) => addon.id) || [],
     },
   });
   const { isSubmitting } = form.formState;
 
-  const [open, setOpen] = useState(false);
-
   const handleOpenChange = () => {
     if (isSubmitting && open) return;
-    setOpen(!open);
+    onOpenChange(!open);
     form.reset();
   };
 
-  const handleCreateItem = async (data: z.infer<typeof CreateItemSchema>) => {
-    const { categoryId, ...formData } = data;
+  const handleUpdateItem = async (data: z.infer<typeof UpdateItemSchema>) => {
+    const result = await dispatch(
+      update({
+        id: row.original.id,
+        data: { ...data, categoryId: Number(data.categoryId) },
+      })
+    );
 
-    const result = await dispatch(store({ id: categoryId, data: formData }));
-
-    if (store.fulfilled.match(result)) {
+    if (update.fulfilled.match(result)) {
       handleOpenChange();
     }
 
-    if (store.rejected.match(result)) {
+    if (update.rejected.match(result)) {
       toast.error(
         getErrorMessage(
           result.payload,
-          "Ocorreu um erro ao criar o item. Por favor, tente novamente."
+          `Ocorreu um erro ao editar o item ${row.getValue(
+            "name"
+          )}. Por favor, tente novamente.`
         ),
         {
           richColors: true,
@@ -123,21 +148,16 @@ export function CreateItemDialog() {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button variant="outline">
-          <PlusCircle /> Criar item
-        </Button>
-      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Criar novo item</DialogTitle>
+          <DialogTitle>Editar item</DialogTitle>
           <DialogDescription>
-            Preencha os campos para criar um novo item.
+            Atualize as informações do item.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleCreateItem)}
+            onSubmit={form.handleSubmit(handleUpdateItem)}
             className="space-y-4"
           >
             <FormField
@@ -164,6 +184,7 @@ export function CreateItemDialog() {
                       id="description"
                       {...field}
                       disabled={isSubmitting}
+                      value={field.value as string | undefined}
                     />
                   </FormControl>
                   <FormMessage />
@@ -214,46 +235,58 @@ export function CreateItemDialog() {
                       <Button
                         variant="outline"
                         className="w-full justify-start px-3"
+                        disabled={itemAddonsLoading}
                       >
                         <PackagePlus />
                         Selecione os adicionais
-                        {!!field?.value?.length && field.value.length > 0 && (
+                        {itemAddonsLoading ? (
                           <>
                             <Separator
                               orientation="vertical"
                               className="mx-2 h-4"
                             />
-                            <Badge
-                              variant="secondary"
-                              className="rounded-sm px-1 font-normal lg:hidden"
-                            >
-                              {field.value.length}
-                            </Badge>
-                            <div className="hidden space-x-1 lg:flex">
-                              {field.value.length > 2 ? (
-                                <Badge
-                                  variant="secondary"
-                                  className="rounded-sm px-1 font-normal"
-                                >
-                                  {field.value.length} selecionados
-                                </Badge>
-                              ) : (
-                                addons
-                                  ?.filter((addon) =>
-                                    field.value?.includes(addon.id)
-                                  )
-                                  .map((option) => (
-                                    <Badge
-                                      variant="secondary"
-                                      key={option.id}
-                                      className="rounded-sm px-1 font-normal"
-                                    >
-                                      {option.name}
-                                    </Badge>
-                                  ))
-                              )}
-                            </div>
+                            <Loader2 className="h-4 w-4 animate-spin" />
                           </>
+                        ) : (
+                          !!field?.value?.length &&
+                          field.value.length > 0 && (
+                            <>
+                              <Separator
+                                orientation="vertical"
+                                className="mx-2 h-4"
+                              />
+                              <Badge
+                                variant="secondary"
+                                className="rounded-sm px-1 font-normal lg:hidden"
+                              >
+                                {field.value.length}
+                              </Badge>
+                              <div className="hidden space-x-1 lg:flex">
+                                {field.value.length > 2 ? (
+                                  <Badge
+                                    variant="secondary"
+                                    className="rounded-sm px-1 font-normal"
+                                  >
+                                    {field.value.length} selecionados
+                                  </Badge>
+                                ) : (
+                                  addons
+                                    ?.filter((addon) =>
+                                      field.value?.includes(addon.id)
+                                    )
+                                    .map((option) => (
+                                      <Badge
+                                        variant="secondary"
+                                        key={option.id}
+                                        className="rounded-sm px-1 font-normal"
+                                      >
+                                        {option.name}
+                                      </Badge>
+                                    ))
+                                )}
+                              </div>
+                            </>
+                          )
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -312,8 +345,12 @@ export function CreateItemDialog() {
               placeholder="R$ 10,00"
             />
             <DialogFooter>
-              <Button type="submit" loading={isSubmitting}>
-                {isSubmitting ? "Criando..." : "Criar Item"}
+              <Button
+                type="submit"
+                loading={isSubmitting}
+                disabled={itemAddonsLoading}
+              >
+                {isSubmitting ? "Salvando..." : "Editar Item"}
               </Button>
             </DialogFooter>
           </form>
