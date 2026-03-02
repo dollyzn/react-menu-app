@@ -153,43 +153,43 @@
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Portuguesa",
         "descricao": "Ovo, Queijo, Presunto e Óregano",
-        "preco": 20.0
+        "preco": 21.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel Vegetariano",
         "descricao": "Brócolis, Queijo, Tomate e Azeitona",
-        "preco": 20.0
+        "preco": 21.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel Vegano",
         "descricao": "Brócolis, Escarola, Tomate e Azeitona",
-        "preco": 20.0
+        "preco": 21.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de 4 Queijos",
         "descricao": "Queijo, Catupiry, Cheddar e Parmesão",
-        "preco": 20.0
+        "preco": 21.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel Frango Supremo",
         "descricao": "Frango, Queijo, Tomate e Milho",
-        "preco": 20.0
+        "preco": 21.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Camarão com Queijo",
         "descricao": "Camarão com Queijo à sua Escolha",
-        "preco": 20.0
+        "preco": 21.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Carne Seca com Queijo",
         "descricao": "Carne Seca com Queijo à sua Escolha",
-        "preco": 20.0
+        "preco": 21.0
       }
     ]
   },
@@ -202,13 +202,13 @@
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Camarão Rosa",
         "descricao": "Camarão Rosa com Molho Rosé ou Grelhado",
-        "preco": 35.0
+        "preco": 38.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Salmão",
         "descricao": "Salmão grelhado",
-        "preco": 35.0
+        "preco": 38.0
       }
     ]
   },
@@ -221,43 +221,43 @@
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Brigadeiro",
         "descricao": "Chocolate Derretido",
-        "preco": 22.0
+        "preco": 23.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de KitKat",
         "descricao": "Creme de KitKat com Pedacinhos de KitKat",
-        "preco": 22.0
+        "preco": 23.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Doce de Leite",
         "descricao": "Recheado com Doce de leite",
-        "preco": 22.0
+        "preco": 23.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel Romeu e Julieta",
         "descricao": "Goiabada com queijo",
-        "preco": 22.0
+        "preco": 23.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Nutella",
         "descricao": "Creme de Avelã com Cacau e Leite",
-        "preco": 22.0
+        "preco": 23.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Chocolate Branco",
         "descricao": "Creme de Chocolate Branco",
-        "preco": 22.0
+        "preco": 23.0
       },
       {
         "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQue9H7vijCn1BH5GmspUqQ9qC3IAuf42Nitw&s",
         "nome": "Pastel de Banana com Canela",
         "descricao": "Banana Fatiada com Açúcar e Canela",
-        "preco": 22.0
+        "preco": 23.0
       }
     ]
   },
@@ -318,121 +318,121 @@
         "foto": "https://a-static.mlcdn.com.br/800x560/refrigerante-coca-cola-lata-350ml-concha-y-toro-coca-cola/texasbom/ed60ee066c6511ee99c54201ac185056/6973e750fec2a106c1abf3a33fb0d4f7.jpeg",
         "nome": "Refrigerante Coca-Cola",
         "descricao": "Lata 350ml",
-        "preco": 5.0
+        "preco": 10.0
       },
       {
         "foto": "https://io.convertiez.com.br/m/superpaguemenos/shop/products/images/15967/medium/refrigerante-coca-cola-zero-acucar-350ml_11123.png",
         "nome": "Refrigerante Coca-Cola Zero",
         "descricao": "Lata 350ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
-        "foto": "https://www.imigrantesbebidas.com.br/bebida/images/products/full/1935-refrigerante-guarana-antarctica-lata-350ml.jpg",
+        "foto": "https://fortatacadista.vteximg.com.br/arquivos/ids/309372-800-800/7891991000826--1-.jpg?v=638537348211430000",
         "nome": "Refrigerante Guaraná",
         "descricao": "Lata 350ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
         "foto": "https://zaffari.vtexassets.com/arquivos/ids/259959/1013086-00.jpg?v=638635668515830000",
         "nome": "Refrigerante Guaraná Zero",
         "descricao": "Lata 350ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
-        "foto": "https://www.auau.com.br/image/cache/data/up_system/product-13806/pepsi-1000x1000.jpg",
+        "foto": "https://mambodelivery.vtexassets.com/arquivos/ids/212025/135274-Refrigerante-Sprite-Lata-350ml.jpg?v=638533649503400000",
         "nome": "Refrigerante Sprite",
         "descricao": "Lata 350ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
         "foto": "https://espacoprime.fbitsstatic.net/img/p/schweppes-citrus-original-350ml-70181/256694-1.jpg?w=480&h=480&v=no-change&qs=ignore",
         "nome": "Refrigerante Schweppes",
         "descricao": "Lata 350ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
-        "foto": "https://cdn.awsli.com.br/600x450/298/298064/produto/58264359/d7476aa5b6.jpg",
+        "foto": "https://images.tcdn.com.br/img/img_prod/1023690/refrigerante_fanta_uva_350ml_c6_1_20260127125457_1fe83c4805e0.jpg",
         "nome": "Refrigerante Fanta Uva",
         "descricao": "Lata 350ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
-        "foto": "https://www.drogarianet.com.br/media/product/211/refrigerante-fanta-laranja-lata-350ml-6eb.jpg",
+        "foto": "https://m.magazineluiza.com.br/a-static/420x420/refrigerante-lata-fanta-laranja-350ml/sryakisoba/314c816eb17811eebdb24201ac185040/0a9b25ab8da9509167d9deb41c64f229.jpeg",
         "nome": "Refrigerante Fanta Laranja",
         "descricao": "Lata 350ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
-        "foto": "https://tb0932.vtexassets.com/arquivos/ids/162415/112940.png?v=637705334878500000",
+        "foto": "https://images.tcdn.com.br/img/img_prod/1023690/agua_mineral_crystal_sem_gas_500_ml_com_12_un_545_1_6ddadc98d212b5a5c86f49b7eabed6d8.jpg",
         "nome": "Água Mineral",
         "descricao": "Garrafa 500ml",
-        "preco": 5.0
+        "preco": 6.0
       },
       {
         "foto": "https://destro.fbitsstatic.net/img/p/bebida-guaraviton-sabor-acai-500ml-86699/273696.jpg?w=500&h=500&v=no-change&qs=ignore",
         "nome": "Guaraviton Açai",
         "descricao": "Garrafa 500ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
         "foto": "https://adegabomretiro.com.br/wp-content/uploads/2019/10/R-199-H2O-500ML-20180618164704-700x850-1.jpg",
         "nome": "H2O",
         "descricao": "Garrafa 500ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
         "foto": "https://img.irroba.com.br/fit-in/600x600/filters:fill(fff):quality(80)/shoeboxs/catalog/7892840812850.jpg",
         "nome": "H2O Limoneto",
         "descricao": "Garrafa 500ml",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
         "foto": "https://carrefourbrfood.vtexassets.com/arquivos/ids/18904682/agua-mineral-com-gas-crystal-500ml-1.jpg?v=637590231096200000",
         "nome": "Água com Gás",
         "descricao": "Garrafa 500ml",
-        "preco": 7.0
+        "preco": 8.0
       },
       {
-        "foto": "https://giassi.vtexassets.com/arquivos/ids/2731935/Nectar-Maracuja-Del-Valle-Lata-290ml.png?v=638627089890970000",
+        "foto": "https://images.tcdn.com.br/img/img_prod/1023690/suco_del_valle_nectar_de_maracuja_290ml_13544_1_2b87521b97ed5cdb216f9cd06c263cdb.jpg",
         "nome": "Suco de Maracujá",
         "descricao": "Lata 290ml, Del Valle",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
-        "foto": "https://hiperideal.vtexassets.com/arquivos/ids/225362/2173697.png?v=638629664223200000",
+        "foto": "https://www.arenaatacado.com.br/on/demandware.static/-/Sites-storefront-catalog-sv/default/dw89fa56ef/Produtos/712922-7894900660333-suco%20del%20valle%20mais%20uva%20lata%20290ml-del%20valle%20mais-1.jpg",
         "nome": "Suco de Uva",
         "descricao": "Lata 290ml, Del Valle",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
-        "foto": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQsGuLrHAVRbPKBZM7jZSh1nD6-CrUIuaHtg&s",
+        "foto": "https://mambodelivery.vtexassets.com/arquivos/ids/235998/230738.jpg?v=638913164724500000",
         "nome": "Suco de Pêssego",
         "descricao": "Lata 290ml, Del Valle",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
         "foto": "https://santaluzia.vtexassets.com/arquivos/ids/993886/1206320.jpg?v=638333550863470000",
         "nome": "Suco de Goiaba",
         "descricao": "Lata 290ml, Del Valle",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
-        "foto": "https://images.tcdn.com.br/img/img_prod/858764/nectar_del_valle_lata_290ml_manga_c_06_287_1_e7bdb93c37d1268415528d1bb719240c.jpeg",
+        "foto": "data:image/jpeg;base64,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",
         "nome": "Suco de Manga",
         "descricao": "Lata 290ml, Del Valle",
-        "preco": 8.0
+        "preco": 10.0
       },
       {
         "foto": "https://samsclub.vtexassets.com/arquivos/ids/157464/Coca-Cola-Pet.jpg?v=637432118384770000",
         "nome": "Refrigerante Coca-Cola",
         "descricao": "Garrafa 200ml",
-        "preco": 8.0
+        "preco": 6.0
       },
       {
-        "foto": "https://s3-sa-east-1.amazonaws.com/superimg/img.produtos/78933873/645/img_1200_1.png",
+        "foto": "https://m.magazineluiza.com.br/a-static/420x420/refrigerante-de-cola-zero-coca-cola-200ml/varandafrutasemercearia/62cf7553e114116c0248cfb9/8f153939c935148125b45779cc4b096f.jpeg",
         "nome": "Refrigerante Coca-Cola Zero",
         "descricao": "Garrafa 200ml",
-        "preco": 8.0
+        "preco": 6.0
       }
     ]
   }
